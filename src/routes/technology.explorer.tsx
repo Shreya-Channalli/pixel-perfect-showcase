@@ -5,7 +5,6 @@ import { z } from "zod";
 import { techModelQuery, filterTechnologies, NO_STATUS_LABEL, type SortKey } from "@/lib/technology/model";
 import { Coordinates, EmptyState, PageTitle, Panel } from "@/components/technology/ModuleShell";
 import { StatusBadge } from "@/components/technology/StatusBadge";
-import { Constellation } from "@/components/technology/Constellation";
 import { TechDrawer } from "@/components/technology/TechDrawer";
 
 const PAGE = 25;
@@ -16,7 +15,6 @@ const searchSchema = z.object({
   sort: z.enum(["name", "status", "category", "assets"]).optional().catch(undefined),
   dir: z.enum(["asc", "desc"]).optional().catch(undefined),
   page: z.coerce.number().int().min(1).optional().catch(undefined),
-  view: z.enum(["table", "spatial"]).optional().catch(undefined),
   tech: z.coerce.number().int().optional().catch(undefined),
 });
 
@@ -33,7 +31,7 @@ export const Route = createFileRoute("/technology/explorer")({
   component: Explorer,
 });
 
-const fieldCls = "h-9 rounded-sm border border-input bg-background/60 px-3 text-sm outline-none focus:border-silo";
+const fieldCls = "h-10 rounded-sm border border-input bg-background px-3 text-sm outline-none focus:border-silo";
 
 function Explorer() {
   const { data: m } = useSuspenseQuery(techModelQuery);
@@ -43,11 +41,9 @@ function Explorer() {
     nav({ search: (prev) => ({ ...prev, ...(resetPage ? { page: undefined } : {}), ...patch }), replace: true });
 
   const results = useMemo(() => filterTechnologies(m, s), [m, s.q, s.cat, s.status, s.sort, s.dir]); // eslint-disable-line react-hooks/exhaustive-deps
-  const highlight = useMemo(() => new Set(results.map((t) => t.id)), [results]);
   const pages = Math.max(1, Math.ceil(results.length / PAGE));
   const page = Math.min(s.page ?? 1, pages);
   const rows = results.slice((page - 1) * PAGE, page * PAGE);
-  const view = s.view ?? "table";
   const filtered = !!(s.q || s.cat !== undefined || s.status);
   const hasUncategorized = m.technologies.some((t) => !t.categoryIds.length);
 
@@ -65,15 +61,9 @@ function Explorer() {
 
   return (
     <>
-      <Coordinates trail={[{ label: "Explorer" }]} />
-      <PageTitle title="Technologies" statement="Every node in the Consilio stack">
-        <div role="radiogroup" aria-label="View mode" className="flex overflow-hidden rounded-sm border border-border">
-          {(["table", "spatial"] as const).map((v) => (
-            <button key={v} role="radio" aria-checked={view === v} onClick={() => set({ view: v }, false)} className={`metadata px-3 py-2 ${view === v ? "bg-accent !text-silo" : "hover:!text-foreground"}`}>
-              {v === "table" ? "Catalogue" : "Constellation"}
-            </button>
-          ))}
-        </div>
+      <Coordinates trail={[{ label: "Technologies" }]} />
+      <PageTitle title="Technologies" statement={`${m.technologies.length} technologies across ${m.categories.length} categories`}>
+        <Link to="/technology/categories" className="rounded-sm border border-border px-3 py-2 text-sm hover:border-silo">Browse by category</Link>
       </PageTitle>
 
       <div className="panel mb-4 flex flex-wrap items-center gap-3 p-3">
@@ -91,7 +81,7 @@ function Explorer() {
           {m.statuses.map((st) => <option key={st} value={st}>{st}</option>)}
           {m.hasMissingStatus && <option value={NO_STATUS_LABEL}>{NO_STATUS_LABEL}</option>}
         </select>
-        <span className="metadata ml-auto" aria-live="polite">{results.length} of {m.technologies.length}</span>
+        <span className="ml-auto text-sm text-muted-foreground" aria-live="polite"><span className="font-display text-lg font-semibold text-foreground tabular-nums">{results.length}</span> of {m.technologies.length}</span>
         {filtered && (
           <button onClick={() => set({ q: undefined, cat: undefined, status: undefined })} className="text-sm text-silo hover:underline">Reset filters</button>
         )}
@@ -103,17 +93,6 @@ function Explorer() {
             <button onClick={() => set({ q: undefined, cat: undefined, status: undefined })} className="text-sm text-silo hover:underline">Clear search and filters</button>
           </EmptyState>
         </Panel>
-      ) : view === "spatial" ? (
-        <Panel meta="Matching nodes stay lit · select a node for details">
-          <Constellation
-            model={m}
-            highlight={filtered ? highlight : undefined}
-            focusCategory={s.cat !== undefined && s.cat !== -1 ? s.cat : undefined}
-            selectedTech={s.tech}
-            onSelectTech={(id) => set({ tech: id }, false)}
-            onSelectCategory={(id) => set({ cat: id })}
-          />
-        </Panel>
       ) : (
         <Panel className="!p-0">
           <div className="overflow-x-auto">
@@ -123,12 +102,12 @@ function Explorer() {
                   {sortBtn("name", "Technology")}
                   {sortBtn("status", "Usage status")}
                   {sortBtn("category", "Categories")}
-                  {sortBtn("assets", "Assets", "text-right")}
+                  {sortBtn("assets", "Applications", "text-right")}
                 </tr>
               </thead>
               <tbody>
                 {rows.map((t) => (
-                  <tr key={t.id} onClick={() => set({ tech: t.id }, false)} className={`cursor-pointer border-b border-border/60 transition-colors hover:bg-accent [&>td]:px-4 [&>td]:py-2.5 ${s.tech === t.id ? "bg-accent" : ""}`}>
+                  <tr key={t.id} onClick={() => set({ tech: t.id }, false)} className={`cursor-pointer border-b border-border/60 transition-colors hover:bg-accent [&>td]:px-4 [&>td]:py-3 ${s.tech === t.id ? "bg-accent" : ""}`}>
                     <td>
                       <button onClick={(e) => { e.stopPropagation(); set({ tech: t.id }, false); }} className="text-left font-medium hover:text-silo">{t.name}</button>
                     </td>
@@ -136,14 +115,14 @@ function Explorer() {
                     <td className="text-sm text-muted-foreground">
                       {t.categoryIds.length ? t.categoryIds.map((c) => m.catById.get(c)!.name).join(", ") : <span className="italic">None</span>}
                     </td>
-                    <td className="text-right font-mono text-sm tabular-nums">{t.assetIds.length}</td>
+                    <td className="text-right font-display text-base font-semibold tabular-nums">{t.assetIds.length}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <div className="flex items-center justify-between px-4 py-3">
-            <span className="metadata">Page {page} / {pages}</span>
+            <span className="text-sm text-muted-foreground">Page {page} of {pages}</span>
             <div className="flex gap-2">
               <button disabled={page <= 1} onClick={() => set({ page: page - 1 }, false)} className="rounded-sm border border-border px-3 py-1 text-sm disabled:opacity-40 enabled:hover:border-silo">Previous</button>
               <button disabled={page >= pages} onClick={() => set({ page: page + 1 }, false)} className="rounded-sm border border-border px-3 py-1 text-sm disabled:opacity-40 enabled:hover:border-silo">Next</button>
@@ -151,9 +130,6 @@ function Explorer() {
           </div>
         </Panel>
       )}
-      <p className="mt-4 text-sm text-muted-foreground">
-        Looking for groupings? <Link to="/technology/categories" className="text-silo hover:underline">Explore categories</Link>.
-      </p>
       <TechDrawer model={m} techId={s.tech} onClose={() => set({ tech: undefined }, false)} />
     </>
   );

@@ -11,8 +11,8 @@ export function TechDrawer({ model, techId, onClose }: { model: TechModel; techI
         {tech && (
           <>
             <SheetHeader className="mb-6 text-left">
-              <div className="metadata">Technology · Node {tech.id}</div>
-              <SheetTitle className="display-title text-4xl">{tech.name}</SheetTitle>
+              <div className="metadata">Technology</div>
+              <SheetTitle className="font-display text-2xl font-semibold">{tech.name}</SheetTitle>
               <SheetDescription asChild>
                 <Link to="/technology/tech/$technologyId" params={{ technologyId: String(tech.id) }} className="text-sm text-silo hover:underline">
                   Open full detail view →

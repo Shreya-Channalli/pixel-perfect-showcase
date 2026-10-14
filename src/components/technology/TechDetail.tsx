@@ -13,8 +13,8 @@ export function TechDetail({ model, tech, full }: { model: TechModel; tech: Tech
         <div className="mt-2"><StatusBadge status={tech.status} /></div>
       </section>
       <section className="grid grid-cols-2 gap-px overflow-hidden rounded-sm border border-border bg-border">
-        <div className="bg-card p-4"><div className="metadata">Categories</div><div className="mt-1 font-display text-3xl font-extralight">{cats.length}</div></div>
-        <div className="bg-card p-4"><div className="metadata">Linked assets</div><div className="mt-1 font-display text-3xl font-extralight">{assets.length}</div></div>
+        <div className="bg-card p-4"><div className="stat-value">{cats.length}</div><div className="mt-1 text-sm text-muted-foreground">Categories</div></div>
+        <div className="bg-card p-4"><div className="stat-value">{assets.length}</div><div className="mt-1 text-sm text-muted-foreground">Linked applications</div></div>
       </section>
       <section>
         <div className="metadata mb-3">Technology categories</div>
@@ -32,7 +32,7 @@ export function TechDetail({ model, tech, full }: { model: TechModel; tech: Tech
       </section>
       <section>
         <div className="mb-3 flex items-baseline justify-between">
-          <span className="metadata">Linked assets</span>
+          <span className="metadata">Linked applications</span>
           {assets.length > 0 && (
             <Link to="/technology/assets" search={{ tech: tech.id }} className="text-xs text-silo hover:underline">Open in relationship explorer →</Link>
           )}
@@ -49,7 +49,7 @@ export function TechDetail({ model, tech, full }: { model: TechModel; tech: Tech
             ))}
           </ul>
         ) : (
-          <p className="text-sm italic text-muted-foreground">No asset relationships recorded.</p>
+          <p className="text-sm italic text-muted-foreground">No application relationships recorded.</p>
         )}
       </section>
     </div>
