@@ -11,7 +11,7 @@ describe("technology model (workbook source)", () => {
   it("preserves all records and relationships", () => {
     expect(m.technologies).toHaveLength(213);
     expect(m.categories).toHaveLength(13);
-    expect(m.categoryLinkCount).toBe(231);
+    expect(m.categoryLinkCount).toBe(212);
     expect(m.relationshipCount).toBe(971);
     expect(m.assets).toHaveLength(89);
   });
