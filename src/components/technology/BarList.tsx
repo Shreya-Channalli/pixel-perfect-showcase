@@ -10,7 +10,7 @@ export interface BarItem {
 }
 
 /** Interactive 2D bar list. Each bar is a real button that navigates to filtered records. */
-export function BarList({ items, unit }: { items: BarItem[]; unit: string }) {
+export function BarList({ items, unit, barClassDefault }: { items: BarItem[]; unit: string; barClassDefault?: string }) {
   const max = Math.max(1, ...items.map((i) => i.value));
   if (!items.length) return <p className="text-sm text-muted-foreground">No records.</p>;
   return (
@@ -26,7 +26,7 @@ export function BarList({ items, unit }: { items: BarItem[]; unit: string }) {
             <span className="truncate text-sm">{i.label}</span>
             <span className="h-1.5 rounded-full bg-muted">
               <span
-                className={`block h-full rounded-full transition-[width] duration-500 ${i.barClass ?? "bg-silo"}`}
+                className={`block h-full rounded-full transition-[width] duration-500 ${i.barClass ?? barClassDefault ?? "bg-silo"}`}
                 style={{ width: `${(i.value / max) * 100}%` }}
               />
             </span>

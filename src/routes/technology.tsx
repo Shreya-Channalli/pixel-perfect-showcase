@@ -24,7 +24,7 @@ export const Route = createFileRoute("/technology")({
         <div className="panel mx-auto mt-20 max-w-md p-8 text-center" role="alert">
           <p className="metadata !text-destructive">Connection interrupted</p>
           <p className="mt-3 font-display text-2xl font-light">Technology data could not be loaded.</p>
-          <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{error instanceof Error ? error.message : String(error)}</p>
           <button onClick={() => router.invalidate()} className="mt-6 rounded-sm border border-silo px-4 py-2 text-sm text-silo hover:bg-accent">
             Retry
           </button>

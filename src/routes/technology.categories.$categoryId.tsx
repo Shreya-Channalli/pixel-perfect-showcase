@@ -39,8 +39,8 @@ function CategoryDetail() {
   const techs = c.technologyIds.map((id) => m.techById.get(id)!).sort((a, b) => a.name.localeCompare(b.name));
   const assetSet = new Set(techs.flatMap((t) => t.assetIds));
   const idx = m.categories.findIndex((x) => x.id === c.id);
-  const prev = m.categories[(idx - 1 + m.categories.length) % m.categories.length];
-  const next = m.categories[(idx + 1) % m.categories.length];
+  const prev = m.categories[(idx - 1 + m.categories.length) % m.categories.length]!;
+  const next = m.categories[(idx + 1) % m.categories.length]!;
 
   return (
     <>
