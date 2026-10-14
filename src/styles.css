@@ -162,8 +162,8 @@
 
 @utility metadata {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted-foreground);
 }
@@ -199,3 +199,25 @@
     transition-duration: 1ms !important;
   }
 }
+
+@utility stat-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Theme-aware scrollbars (both themes) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--muted-foreground) 45%, transparent) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--muted-foreground) 40%, transparent);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover { background: color-mix(in oklab, var(--muted-foreground) 70%, transparent); }
