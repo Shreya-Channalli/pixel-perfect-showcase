@@ -10,33 +10,134 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TechnologyRouteImport } from './routes/technology'
+import { Route as TechnologyIndexRouteImport } from './routes/technology.index'
+import { Route as TechnologyAssetsRouteImport } from './routes/technology.assets'
+import { Route as TechnologyCategoriesRouteImport } from './routes/technology.categories'
+import { Route as TechnologyExplorerRouteImport } from './routes/technology.explorer'
+import { Route as TechnologyInsightsRouteImport } from './routes/technology.insights'
+import { Route as TechnologyCategoriesCategoryIdRouteImport } from './routes/technology.categories.$categoryId'
+import { Route as TechnologyTechTechnologyIdRouteImport } from './routes/technology.tech.$technologyId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechnologyRoute = TechnologyRouteImport.update({
+  id: '/technology',
+  path: '/technology',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TechnologyIndexRoute = TechnologyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TechnologyRoute,
+} as any)
+const TechnologyAssetsRoute = TechnologyAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => TechnologyRoute,
+} as any)
+const TechnologyCategoriesRoute = TechnologyCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => TechnologyRoute,
+} as any)
+const TechnologyExplorerRoute = TechnologyExplorerRouteImport.update({
+  id: '/explorer',
+  path: '/explorer',
+  getParentRoute: () => TechnologyRoute,
+} as any)
+const TechnologyInsightsRoute = TechnologyInsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => TechnologyRoute,
+} as any)
+const TechnologyCategoriesCategoryIdRoute =
+  TechnologyCategoriesCategoryIdRouteImport.update({
+    id: '/$categoryId',
+    path: '/$categoryId',
+    getParentRoute: () => TechnologyCategoriesRoute,
+  } as any)
+const TechnologyTechTechnologyIdRoute =
+  TechnologyTechTechnologyIdRouteImport.update({
+    id: '/tech/$technologyId',
+    path: '/tech/$technologyId',
+    getParentRoute: () => TechnologyRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/technology': typeof TechnologyRouteWithChildren
+  '/technology/assets': typeof TechnologyAssetsRoute
+  '/technology/categories': typeof TechnologyCategoriesRouteWithChildren
+  '/technology/explorer': typeof TechnologyExplorerRoute
+  '/technology/insights': typeof TechnologyInsightsRoute
+  '/technology/': typeof TechnologyIndexRoute
+  '/technology/categories/$categoryId': typeof TechnologyCategoriesCategoryIdRoute
+  '/technology/tech/$technologyId': typeof TechnologyTechTechnologyIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/technology/assets': typeof TechnologyAssetsRoute
+  '/technology/categories': typeof TechnologyCategoriesRouteWithChildren
+  '/technology/explorer': typeof TechnologyExplorerRoute
+  '/technology/insights': typeof TechnologyInsightsRoute
+  '/technology': typeof TechnologyIndexRoute
+  '/technology/categories/$categoryId': typeof TechnologyCategoriesCategoryIdRoute
+  '/technology/tech/$technologyId': typeof TechnologyTechTechnologyIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/technology': typeof TechnologyRouteWithChildren
+  '/technology/assets': typeof TechnologyAssetsRoute
+  '/technology/categories': typeof TechnologyCategoriesRouteWithChildren
+  '/technology/explorer': typeof TechnologyExplorerRoute
+  '/technology/insights': typeof TechnologyInsightsRoute
+  '/technology/': typeof TechnologyIndexRoute
+  '/technology/categories/$categoryId': typeof TechnologyCategoriesCategoryIdRoute
+  '/technology/tech/$technologyId': typeof TechnologyTechTechnologyIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/technology'
+    | '/technology/assets'
+    | '/technology/categories'
+    | '/technology/explorer'
+    | '/technology/insights'
+    | '/technology/'
+    | '/technology/categories/$categoryId'
+    | '/technology/tech/$technologyId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/technology/assets'
+    | '/technology/categories'
+    | '/technology/explorer'
+    | '/technology/insights'
+    | '/technology'
+    | '/technology/categories/$categoryId'
+    | '/technology/tech/$technologyId'
+  id:
+    | '__root__'
+    | '/'
+    | '/technology'
+    | '/technology/assets'
+    | '/technology/categories'
+    | '/technology/explorer'
+    | '/technology/insights'
+    | '/technology/'
+    | '/technology/categories/$categoryId'
+    | '/technology/tech/$technologyId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TechnologyRoute: typeof TechnologyRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +149,101 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/technology': {
+      id: '/technology'
+      path: '/technology'
+      fullPath: '/technology'
+      preLoaderRoute: typeof TechnologyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/technology/': {
+      id: '/technology/'
+      path: '/'
+      fullPath: '/technology/'
+      preLoaderRoute: typeof TechnologyIndexRouteImport
+      parentRoute: typeof TechnologyRoute
+    }
+    '/technology/assets': {
+      id: '/technology/assets'
+      path: '/assets'
+      fullPath: '/technology/assets'
+      preLoaderRoute: typeof TechnologyAssetsRouteImport
+      parentRoute: typeof TechnologyRoute
+    }
+    '/technology/categories': {
+      id: '/technology/categories'
+      path: '/categories'
+      fullPath: '/technology/categories'
+      preLoaderRoute: typeof TechnologyCategoriesRouteImport
+      parentRoute: typeof TechnologyRoute
+    }
+    '/technology/explorer': {
+      id: '/technology/explorer'
+      path: '/explorer'
+      fullPath: '/technology/explorer'
+      preLoaderRoute: typeof TechnologyExplorerRouteImport
+      parentRoute: typeof TechnologyRoute
+    }
+    '/technology/insights': {
+      id: '/technology/insights'
+      path: '/insights'
+      fullPath: '/technology/insights'
+      preLoaderRoute: typeof TechnologyInsightsRouteImport
+      parentRoute: typeof TechnologyRoute
+    }
+    '/technology/categories/$categoryId': {
+      id: '/technology/categories/$categoryId'
+      path: '/$categoryId'
+      fullPath: '/technology/categories/$categoryId'
+      preLoaderRoute: typeof TechnologyCategoriesCategoryIdRouteImport
+      parentRoute: typeof TechnologyCategoriesRoute
+    }
+    '/technology/tech/$technologyId': {
+      id: '/technology/tech/$technologyId'
+      path: '/tech/$technologyId'
+      fullPath: '/technology/tech/$technologyId'
+      preLoaderRoute: typeof TechnologyTechTechnologyIdRouteImport
+      parentRoute: typeof TechnologyRoute
+    }
   }
 }
 
+interface TechnologyCategoriesRouteChildren {
+  TechnologyCategoriesCategoryIdRoute: typeof TechnologyCategoriesCategoryIdRoute
+}
+
+const TechnologyCategoriesRouteChildren: TechnologyCategoriesRouteChildren = {
+  TechnologyCategoriesCategoryIdRoute: TechnologyCategoriesCategoryIdRoute,
+}
+
+const TechnologyCategoriesRouteWithChildren =
+  TechnologyCategoriesRoute._addFileChildren(TechnologyCategoriesRouteChildren)
+
+interface TechnologyRouteChildren {
+  TechnologyAssetsRoute: typeof TechnologyAssetsRoute
+  TechnologyCategoriesRoute: typeof TechnologyCategoriesRouteWithChildren
+  TechnologyExplorerRoute: typeof TechnologyExplorerRoute
+  TechnologyInsightsRoute: typeof TechnologyInsightsRoute
+  TechnologyIndexRoute: typeof TechnologyIndexRoute
+  TechnologyTechTechnologyIdRoute: typeof TechnologyTechTechnologyIdRoute
+}
+
+const TechnologyRouteChildren: TechnologyRouteChildren = {
+  TechnologyAssetsRoute: TechnologyAssetsRoute,
+  TechnologyCategoriesRoute: TechnologyCategoriesRouteWithChildren,
+  TechnologyExplorerRoute: TechnologyExplorerRoute,
+  TechnologyInsightsRoute: TechnologyInsightsRoute,
+  TechnologyIndexRoute: TechnologyIndexRoute,
+  TechnologyTechTechnologyIdRoute: TechnologyTechTechnologyIdRoute,
+}
+
+const TechnologyRouteWithChildren = TechnologyRoute._addFileChildren(
+  TechnologyRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TechnologyRoute: TechnologyRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
