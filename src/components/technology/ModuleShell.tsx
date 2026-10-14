@@ -153,7 +153,7 @@ export function Panel({ title, meta, children, className = "" }: { title?: strin
 }
 
 /** Large number with a smaller label underneath. Renders as a link when `to` is given. */
-export function Stat({ value, label, hint, to, search, tone }: { value: number | string; label: string; hint?: string; to?: string; search?: Record<string, unknown>; tone?: string }) {
+export function Stat({ value, label, hint, to, search, tone }: { value: number | string; label: string; hint?: string | undefined; to?: string | undefined; search?: Record<string, unknown> | undefined; tone?: string | undefined }) {
   const body = (
     <>
       <div className={`stat-value ${tone ?? ""}`}>{typeof value === "number" ? value.toLocaleString() : value}</div>
