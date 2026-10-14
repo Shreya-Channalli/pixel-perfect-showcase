@@ -14,14 +14,14 @@ export const Route = createFileRoute("/technology/tech/$technologyId")({
   head: ({ loaderData }) => ({
     meta: [
       { title: `${loaderData?.name ?? "Technology"} — SiloVerse Technology` },
-      { name: "description", content: `Usage status, categories and linked Consilio assets for ${loaderData?.name ?? "this technology"}.` },
+      { name: "description", content: `Usage status, categories and linked Consilio applications for ${loaderData?.name ?? "this technology"}.` },
       { property: "og:title", content: `${loaderData?.name ?? "Technology"} — SiloVerse` },
-      { property: "og:description", content: `Usage status, categories and linked Consilio assets for ${loaderData?.name ?? "this technology"}.` },
+      { property: "og:description", content: `Usage status, categories and linked Consilio applications for ${loaderData?.name ?? "this technology"}.` },
     ],
   }),
   notFoundComponent: () => (
     <EmptyState title="This technology does not exist">
-      <Link to="/technology/explorer" className="text-sm text-silo hover:underline">Back to explorer</Link>
+      <Link to="/technology/explorer" className="text-sm text-silo hover:underline">Back to technologies</Link>
     </EmptyState>
   ),
   component: Detail,
@@ -32,8 +32,10 @@ function Detail() {
   const t = m.techById.get(Number(Route.useParams().technologyId))!;
   return (
     <>
-      <Coordinates trail={[{ label: "Explorer", to: "/technology/explorer" }, { label: `Node ${t.id}` }]} />
-      <PageTitle title={t.name} statement="Technology detail" />
+      <Coordinates trail={[{ label: "Technologies", to: "/technology/explorer" }, { label: t.name }]} />
+      <PageTitle title={t.name} statement="Technology detail">
+        <Link to="/technology/explorer" className="rounded-sm border border-border px-3 py-1.5 text-sm hover:border-silo">← All technologies</Link>
+      </PageTitle>
       <Panel><TechDetail model={m} tech={t} full /></Panel>
     </>
   );
